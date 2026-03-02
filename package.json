@@ -1,0 +1,33 @@
+{
+  "name": "subaru",
+  "version": "1.0.0",
+  "description": "Subaru — Local AI assistant agent",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "subaru": "./bin/subaru.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "ajv": "latest",
+    "better-sqlite3": "latest",
+    "chalk": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "node-telegram-bot-api": "latest",
+    "openai": "latest",
+    "puppeteer": "^24.37.5"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18"
+  }
+}

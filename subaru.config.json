@@ -1,0 +1,39 @@
+{
+  "llm": {
+    "provider": "ollama",
+    "model": "gpt-oss:120b-cloud",
+    "baseURL": "http://localhost:11434",
+    "apiKey": ""
+  },
+  "interfaces": {
+    "cli": { "enabled": true },
+    "web": { "enabled": true, "port": 3131 },
+    "telegram": { "enabled": true, "botToken": "" }
+  },
+  "tools": {
+    "filesystem": {
+      "enabled": true,
+      "allowedPaths": ["~/subaru-workspace"],
+      "blockedPaths": ["/etc", "/sys", "/boot", "~/.ssh"]
+    },
+    "shell": {
+      "enabled": true,
+      "requireConfirmation": true,
+      "blockedCommands": ["rm -rf /", "mkfs", "dd if="]
+    },
+    "http": { "enabled": true },
+    "code": { "enabled": true, "timeout": 10000 },
+    "database": { "enabled": true, "path": "./data/memory.db" },
+    "git": { "enabled": true },
+    "browser": { "enabled": true, "headless": true, "timeout": 30000 }
+  },
+  "memory": {
+    "shortTermMaxMessages": 100,
+    "longTermEnabled": true,
+    "vectorSimilarityThreshold": 0.7
+  },
+  "safety": {
+    "confirmDangerousCommands": true,
+    "sandboxShell": false
+  }
+}

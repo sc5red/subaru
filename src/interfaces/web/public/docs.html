@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUBARU — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-surface: #111111;
+  --bg-code: #0d0d0d;
+  --bg-hover: #1a1a1a;
+  --border: rgba(0, 212, 255, 0.15);
+  --border-bright: rgba(0, 212, 255, 0.35);
+  --cyan: #00d4ff;
+  --cyan-dim: rgba(0, 212, 255, 0.6);
+  --cyan-bg: rgba(0, 212, 255, 0.05);
+  --amber: #ffaa00;
+  --amber-dim: rgba(255, 170, 0, 0.6);
+  --red: #ff4444;
+  --green: #44ff88;
+  --purple: #bb88ff;
+  --text: #e0e0e0;
+  --text-dim: #999;
+  --text-muted: #555;
+  --font: 'Geist Mono', 'Cascadia Code', 'Fira Code', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Scanline texture */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Layout */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar navigation */
+.doc-nav {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.doc-nav-brand {
+  padding: 0 20px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.doc-nav-brand a {
+  color: var(--cyan);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-decoration: none;
+}
+.doc-nav-brand a:hover { opacity: 0.8; }
+
+.doc-nav-brand .subtitle {
+  display: block;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+.nav-section {
+  padding: 8px 20px 4px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--cyan-dim);
+}
+
+.nav-link {
+  display: block;
+  padding: 5px 20px 5px 28px;
+  font-size: 11px;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+.nav-link:hover {
+  color: var(--text);
+  background: var(--bg-hover);
+  border-left-color: var(--border);
+}
+.nav-link.active {
+  color: var(--cyan);
+  border-left-color: var(--cyan);
+  background: var(--cyan-bg);
+}
+
+.nav-back {
+  display: block;
+  padding: 8px 20px;
+  font-size: 11px;
+  color: var(--cyan-dim);
+  text-decoration: none;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.nav-back:hover { color: var(--cyan); }
+
+/* Main content */
+.doc-content {
+  flex: 1;
+  max-width: 860px;
+  padding: 40px 48px 80px;
+}
+
+/* Typography */
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--cyan);
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+
+h1 .version {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0;
+  font-weight: 400;
+  margin-left: 8px;
+}
+
+.doc-subtitle {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cyan);
+  margin-top: 48px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 1px;
+}
+
+h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 28px;
+  margin-bottom: 10px;
+}
+
+h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--amber);
+  margin-top: 20px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+p {
+  margin-bottom: 12px;
+  color: var(--text-dim);
+}
+
+strong { color: var(--text); }
+em { color: var(--amber-dim); font-style: italic; }
+
+a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+ul, ol {
+  margin-bottom: 12px;
+  padding-left: 24px;
+}
+li {
+  margin-bottom: 4px;
+  color: var(--text-dim);
+}
+li strong { color: var(--text); }
+
+/* Code */
+code {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: var(--amber);
+}
+
+pre {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  font-size: 11px;
+  line-height: 1.6;
+}
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-dim);
+}
+
+/* Highlight keywords in code */
+.kw { color: var(--purple); }
+.str { color: var(--green); }
+.cm { color: var(--text-muted); font-style: italic; }
+.fn { color: var(--cyan); }
+.num { color: var(--amber); }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+th {
+  text-align: left;
+  padding: 8px 12px;
+  background: var(--bg-surface);
+  color: var(--cyan-dim);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border-bright);
+}
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  vertical-align: top;
+}
+td code {
+  font-size: 11px;
+}
+
+/* Info boxes */
+.info-box {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+.info-box.note {
+  border-color: rgba(0, 212, 255, 0.3);
+  background: rgba(0, 212, 255, 0.03);
+}
+.info-box.warn {
+  border-color: rgba(255, 170, 0, 0.3);
+  background: rgba(255, 170, 0, 0.03);
+}
+.info-box.danger {
+  border-color: rgba(255, 68, 68, 0.3);
+  background: rgba(255, 68, 68, 0.03);
+}
+.info-box .box-title {
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.info-box.note .box-title { color: var(--cyan); }
+.info-box.warn .box-title { color: var(--amber); }
+.info-box.danger .box-title { color: var(--red); }
+
+/* Diagram / Flow */
+.flow-diagram {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 16px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  text-align: center;
+  overflow-x: auto;
+  white-space: pre;
+}
+.flow-diagram .highlight { color: var(--cyan); font-weight: 700; }
+.flow-diagram .accent { color: var(--amber); }
+.flow-diagram .dim { color: var(--text-muted); }
+
+/* File tree */
+.file-tree {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+.file-tree .dir { color: var(--cyan-dim); }
+.file-tree .file { color: var(--text-dim); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .doc-nav { display: none; }
+  .doc-content { padding: 24px 20px 60px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- Navigation Sidebar -->
+<nav class="doc-nav">
+  <div class="doc-nav-brand">
+    <a href="/">SUBARU</a>
+    <span class="subtitle">Documentation</span>
+  </div>
+
+  <div class="nav-section">Overview</div>
+  <a class="nav-link" href="#overview">What is Subaru?</a>
+  <a class="nav-link" href="#architecture">Architecture</a>
+  <a class="nav-link" href="#project-structure">Project Structure</a>
+  <a class="nav-link" href="#getting-started">Getting Started</a>
+
+  <div class="nav-section">Core Systems</div>
+  <a class="nav-link" href="#boot-sequence">Boot Sequence</a>
+  <a class="nav-link" href="#config-system">Configuration</a>
+  <a class="nav-link" href="#agent-loop">Agent Loop</a>
+  <a class="nav-link" href="#llm-client">LLM Client</a>
+  <a class="nav-link" href="#providers">LLM Providers</a>
+
+  <div class="nav-section">Memory</div>
+  <a class="nav-link" href="#short-term">Short-term Memory</a>
+  <a class="nav-link" href="#long-term">Long-term Memory</a>
+  <a class="nav-link" href="#preferences">Preferences DB</a>
+
+  <div class="nav-section">Tools</div>
+  <a class="nav-link" href="#tool-registry">Tool Registry</a>
+  <a class="nav-link" href="#built-in-tools">Built-in Tools</a>
+  <a class="nav-link" href="#tool-execution">Tool Execution Flow</a>
+
+  <div class="nav-section">Interfaces</div>
+  <a class="nav-link" href="#cli-interface">CLI</a>
+  <a class="nav-link" href="#web-interface">Web Dashboard</a>
+  <a class="nav-link" href="#telegram-interface">Telegram Bot</a>
+
+  <div class="nav-section">Safety</div>
+  <a class="nav-link" href="#permissions">Permissions</a>
+  <a class="nav-link" href="#confirmations">Confirmations</a>
+  <a class="nav-link" href="#sandboxing">Sandboxing</a>
+
+  <div class="nav-section">Plugin Development</div>
+  <a class="nav-link" href="#plugin-overview">Overview</a>
+  <a class="nav-link" href="#plugin-anatomy">Plugin Anatomy</a>
+  <a class="nav-link" href="#plugin-schema">Parameter Schema</a>
+  <a class="nav-link" href="#plugin-execute">Execute Function</a>
+  <a class="nav-link" href="#plugin-context">Context Object</a>
+  <a class="nav-link" href="#plugin-examples">Examples</a>
+  <a class="nav-link" href="#plugin-multi-tool">Multi-tool Plugins</a>
+  <a class="nav-link" href="#plugin-best-practices">Best Practices</a>
+  <a class="nav-link" href="#plugin-debugging">Debugging</a>
+  <a class="nav-link" href="#plugin-management">Managing Plugins</a>
+
+  <div class="nav-section">API Reference</div>
+  <a class="nav-link" href="#api-endpoints">REST API Endpoints</a>
+  <a class="nav-link" href="#sse-events">SSE Event Types</a>
+
+  <a class="nav-back" href="/">← Back to Dashboard</a>
+</nav>
+
+<!-- Documentation Content -->
+<main class="doc-content">
+
+<h1>SUBARU <span class="version">v1.0.0</span></h1>
+<p class="doc-subtitle">Complete technical documentation for Subaru, a fully local AI assistant agent with autonomous tool use, multi-interface support, and an extensible plugin system.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="overview">What is Subaru?</h2>
+
+<p>Subaru is an <strong>autonomous AI agent</strong> that runs entirely on your local machine. It connects to a large language model (LLM) — either a local model via <strong>Ollama</strong>, or a cloud API like <strong>OpenAI</strong> or <strong>Anthropic</strong> — and gives the LLM direct access to your filesystem, shell, browser, database, git, and more through a powerful tool-calling system.</p>
+
+<p>Unlike simple chatbot wrappers, Subaru operates as a true agent: it plans complex tasks, executes multi-step tool chains autonomously, stores memories across sessions, and provides three separate interfaces (CLI, Web, Telegram) for interacting with it.</p>
+
+<h3>Key Features</h3>
+<ul>
+  <li><strong>36 built-in tools</strong> across 8 modules: filesystem, shell, HTTP, code execution, database, git, browser automation, and display</li>
+  <li><strong>Autonomous agent loop</strong> with automatic multi-step tool chaining (up to 25 iterations per task)</li>
+  <li><strong>Task planning</strong> for complex requests — automatically decomposes them into actionable steps</li>
+  <li><strong>Dual memory system</strong> — short-term conversation history (with SQLite persistence) + long-term vector memory with semantic recall</li>
+  <li><strong>Three interfaces</strong> — terminal CLI, web dashboard with SSE streaming, and Telegram bot</li>
+  <li><strong>Plugin system</strong> — extend with custom tools by dropping <code>.js</code> files into <code>plugins/</code></li>
+  <li><strong>Safety layer</strong> — path/command blocking, confirmation prompts for dangerous operations, optional sandboxing</li>
+  <li><strong>Multi-provider LLM support</strong> — Ollama (local), OpenAI, Anthropic with automatic retry and exponential backoff</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="architecture">Architecture</h2>
+
+<p>Subaru follows a modular architecture with clear separation of concerns. The system is built around a central <strong>agent loop</strong> that orchestrates communication between the LLM, tools, and memory systems.</p>
+
+<div class="flow-diagram">
+<span class="dim">┌─────────────────────────────────────────────────────────────────┐</span>
+<span class="dim">│</span>                       <span class="highlight">INTERFACES</span>                               <span class="dim">│</span>
+<span class="dim">│</span>     <span class="accent">CLI</span> (readline)    <span class="accent">Web</span> (Express+SSE)    <span class="accent">Telegram</span> (Bot)    <span class="dim">│</span>
+<span class="dim">└──────────────┬──────────────┬──────────────────┬───────────────┘</span>
+               <span class="dim">│              │                  │</span>
+               <span class="dim">└──────────────┼──────────────────┘</span>
+                              <span class="dim">▼</span>
+               <span class="dim">┌──────────────────────────┐</span>
+               <span class="dim">│</span>       <span class="highlight">AGENT CORE</span>          <span class="dim">│</span>
+               <span class="dim">│</span>  <span class="accent">Planner</span> → <span class="accent">Reasoner</span> → <span class="accent">Executor</span> <span class="dim">│</span>
+               <span class="dim">│</span>     (multi-turn loop)    <span class="dim">│</span>
+               <span class="dim">└──────┬───────────┬────────┘</span>
+                      <span class="dim">│           │</span>
+            <span class="dim">┌─────────┘           └──────────┐</span>
+            <span class="dim">▼</span>                                  <span class="dim">▼</span>
+<span class="dim">┌──────────────────┐</span>              <span class="dim">┌───────────────────────┐</span>
+<span class="dim">│</span>   <span class="highlight">LLM CLIENT</span>     <span class="dim">│</span>              <span class="dim">│</span>    <span class="highlight">TOOL REGISTRY</span>       <span class="dim">│</span>
+<span class="dim">│</span> <span class="accent">Ollama</span>│<span class="accent">OpenAI</span>│<span class="accent">Anthropic</span><span class="dim">│</span>    <span class="dim">│</span> 36 built-in + plugins  <span class="dim">│</span>
+<span class="dim">│</span> Streaming + Retry <span class="dim">│</span>              <span class="dim">│</span> Dispatch + Validation  <span class="dim">│</span>
+<span class="dim">└──────────────────┘</span>              <span class="dim">└───────────────────────┘</span>
+            <span class="dim">│</span>                                  <span class="dim">│</span>
+            <span class="dim">▼</span>                                  <span class="dim">▼</span>
+<span class="dim">┌──────────────────┐</span>              <span class="dim">┌───────────────────────┐</span>
+<span class="dim">│</span>     <span class="highlight">MEMORY</span>       <span class="dim">│</span>              <span class="dim">│</span>       <span class="highlight">SAFETY</span>          <span class="dim">│</span>
+<span class="dim">│</span> <span class="accent">Short</span>│<span class="accent">Long</span>│<span class="accent">Prefs</span>  <span class="dim">│</span>              <span class="dim">│</span> Permissions│Confirm│Sandbox<span class="dim">│</span>
+<span class="dim">└──────────────────┘</span>              <span class="dim">└───────────────────────┘</span>
+</div>
+
+<p>Every component communicates through well-defined interfaces. The agent doesn't call tools directly — it tells the LLM what tools are available; the LLM decides which to call; the <strong>executor</strong> validates and runs them; and results feed back into the conversation.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="project-structure">Project Structure</h2>
+
+<div class="file-tree">
+<span class="dir">subaru/</span>
+├── <span class="file">package.json</span>              <span class="dim"># Dependencies, scripts, bin entry</span>
+├── <span class="file">subaru.config.json</span>        <span class="dim"># Runtime configuration (generated from defaults)</span>
+├── <span class="file">.env</span>                      <span class="dim"># Environment overrides (API keys, etc.)</span>
+├── <span class="dir">bin/</span>
+│   └── <span class="file">subaru.js</span>             <span class="dim"># CLI entry point (npm link target)</span>
+├── <span class="dir">data/</span>
+│   ├── <span class="file">memory.db</span>             <span class="dim"># SQLite DB: preferences + conversation persistence</span>
+│   ├── <span class="dir">screenshots/</span>           <span class="dim"># Browser screenshot storage</span>
+│   ├── <span class="dir">tmp/</span>                   <span class="dim"># Temporary files (voice messages, etc.)</span>
+│   └── <span class="dir">vectors/</span>
+│       └── <span class="file">memories.json</span>     <span class="dim"># Long-term vector memory store</span>
+├── <span class="dir">plugins/</span>                   <span class="dim"># Custom plugin .js files go here</span>
+├── <span class="dir">src/</span>
+│   ├── <span class="file">index.js</span>              <span class="dim"># Main entry: boot sequence + startup</span>
+│   ├── <span class="dir">agent/</span>
+│   │   ├── <span class="file">agent.js</span>          <span class="dim"># Core agent loop (run function)</span>
+│   │   ├── <span class="file">planner.js</span>        <span class="dim"># Task decomposition for complex requests</span>
+│   │   ├── <span class="file">reasoner.js</span>       <span class="dim"># LLM interaction wrapper (async generator)</span>
+│   │   └── <span class="file">executor.js</span>       <span class="dim"># Tool call validation + dispatch</span>
+│   ├── <span class="dir">config/</span>
+│   │   ├── <span class="file">config.js</span>         <span class="dim"># Config loader (deep merge defaults + file + env)</span>
+│   │   └── <span class="file">defaults.js</span>       <span class="dim"># Default configuration values</span>
+│   ├── <span class="dir">interfaces/</span>
+│   │   ├── <span class="file">cli.js</span>            <span class="dim"># Readline REPL interface</span>
+│   │   ├── <span class="dir">telegram/</span>
+│   │   │   ├── <span class="file">bot.js</span>        <span class="dim"># Telegram bot setup (polling connection)</span>
+│   │   │   └── <span class="file">handler.js</span>    <span class="dim"># Message/voice/callback handling</span>
+│   │   └── <span class="dir">web/</span>
+│   │       ├── <span class="file">server.js</span>     <span class="dim"># Express server, auth, rate limiting</span>
+│   │       ├── <span class="file">routes.js</span>     <span class="dim"># REST API + SSE streaming endpoints</span>
+│   │       └── <span class="dir">public/</span>
+│   │           ├── <span class="file">index.html</span> <span class="dim"># SPA web dashboard</span>
+│   │           └── <span class="file">docs.html</span>  <span class="dim"># This documentation page</span>
+│   ├── <span class="dir">llm/</span>
+│   │   ├── <span class="file">client.js</span>         <span class="dim"># Unified LLM interface (chat, embed, retry)</span>
+│   │   ├── <span class="file">stt.js</span>            <span class="dim"># Speech-to-text for voice messages</span>
+│   │   ├── <span class="dir">prompts/</span>
+│   │   │   ├── <span class="file">system.js</span>     <span class="dim"># Dynamic system prompt builder</span>
+│   │   │   └── <span class="file">toolDefs.js</span>   <span class="dim"># Tool → OpenAI function-calling format</span>
+│   │   └── <span class="dir">providers/</span>
+│   │       ├── <span class="file">anthropic.js</span>  <span class="dim"># Anthropic Claude provider</span>
+│   │       ├── <span class="file">ollama.js</span>     <span class="dim"># Ollama local model provider</span>
+│   │       └── <span class="file">openai.js</span>     <span class="dim"># OpenAI GPT provider</span>
+│   ├── <span class="dir">memory/</span>
+│   │   ├── <span class="file">shortTerm.js</span>      <span class="dim"># In-memory + SQLite conversation history</span>
+│   │   ├── <span class="file">longTerm.js</span>       <span class="dim"># Vector similarity memory (embeddings)</span>
+│   │   └── <span class="file">preferences.js</span>    <span class="dim"># Key-value preferences store (SQLite)</span>
+│   ├── <span class="dir">safety/</span>
+│   │   ├── <span class="file">confirmation.js</span>   <span class="dim"># Confirmation prompts (CLI/Web/Telegram)</span>
+│   │   ├── <span class="file">permissions.js</span>    <span class="dim"># Path + command safety checks</span>
+│   │   └── <span class="file">sandbox.js</span>        <span class="dim"># Optional firejail/Docker sandboxing</span>
+│   ├── <span class="dir">tools/</span>
+│   │   ├── <span class="file">registry.js</span>       <span class="dim"># Tool registration, dispatch, plugin loading</span>
+│   │   ├── <span class="file">filesystem.js</span>     <span class="dim"># 9 file I/O tools</span>
+│   │   ├── <span class="file">shell.js</span>          <span class="dim"># 2 shell execution tools</span>
+│   │   ├── <span class="file">http.js</span>           <span class="dim"># 1 HTTP request tool</span>
+│   │   ├── <span class="file">code.js</span>           <span class="dim"># 2 code execution tools</span>
+│   │   ├── <span class="file">database.js</span>       <span class="dim"># 3 SQLite tools</span>
+│   │   ├── <span class="file">git.js</span>            <span class="dim"># 8 git tools</span>
+│   │   ├── <span class="file">browser.js</span>        <span class="dim"># 10 Puppeteer browser tools</span>
+│   │   └── <span class="file">display.js</span>        <span class="dim"># 1 image display tool</span>
+│   └── <span class="dir">utils/</span>
+│       ├── <span class="file">events.js</span>         <span class="dim"># Global EventEmitter bus</span>
+│       ├── <span class="file">logger.js</span>         <span class="dim"># Leveled logger (debug/info/warn/error)</span>
+│       └── <span class="file">format.js</span>         <span class="dim"># String formatting utilities</span>
+└── <span class="dir">tests/</span>                     <span class="dim"># Vitest test files</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="getting-started">Getting Started</h2>
+
+<h3>Prerequisites</h3>
+<ul>
+  <li><strong>Node.js 20+</strong> (uses ESM imports, modern features)</li>
+  <li><strong>Ollama</strong> (recommended, for local LLM) — or an OpenAI/Anthropic API key</li>
+</ul>
+
+<h3>Installation</h3>
+<pre><code><span class="cm"># Clone and install</span>
+git clone &lt;repo-url&gt; subaru
+<span class="kw">cd</span> subaru
+npm install
+
+<span class="cm"># (Optional) Install globally via npm link</span>
+npm link
+
+<span class="cm"># Configure</span>
+cp .env.example .env
+<span class="cm"># Edit .env with your API keys and settings</span>
+
+<span class="cm"># Start</span>
+npm start
+<span class="cm"># Or if linked globally:</span>
+subaru</code></pre>
+
+<h3>Configuration Priority</h3>
+<p>Configuration is loaded in this order (later values override earlier):</p>
+<ol>
+  <li><code>src/config/defaults.js</code> — built-in defaults</li>
+  <li><code>subaru.config.json</code> — project-level configuration file</li>
+  <li><code>.env</code> file — environment variable overrides for sensitive values</li>
+</ol>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="boot-sequence">Boot Sequence</h2>
+
+<p>When Subaru starts (<code>src/index.js</code>), it follows this exact initialization order:</p>
+
+<ol>
+  <li><strong>Load configuration</strong> — <code>config/config.js</code> reads defaults → merges <code>subaru.config.json</code> → applies <code>.env</code> overrides → freezes the config object</li>
+  <li><strong>Initialize logger</strong> — configured via <code>LOG_LEVEL</code> env var (debug/info/warn/error)</li>
+  <li><strong>Initialize preferences DB</strong> — opens SQLite at <code>data/memory.db</code>, creates <code>preferences</code> table</li>
+  <li><strong>Initialize conversation persistence</strong> — creates <code>conversation_history</code> table in same DB</li>
+  <li><strong>Initialize LLM client</strong> — imports the configured provider (Ollama/OpenAI/Anthropic)</li>
+  <li><strong>Initialize long-term memory</strong> — loads <code>data/vectors/memories.json</code>, probes embedding model availability</li>
+  <li><strong>Load tool registry</strong> — registers all enabled built-in tools, then scans <code>plugins/</code> directory</li>
+  <li><strong>Start interfaces concurrently</strong> — launches Web server, CLI REPL, and/or Telegram bot based on config</li>
+  <li><strong>Register graceful shutdown</strong> — SIGINT/SIGTERM handlers cleanly close all resources</li>
+</ol>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="config-system">Configuration</h2>
+
+<p>The config system uses a three-layer merge strategy. The frozen config object is available globally as the default export of <code>config/config.js</code>.</p>
+
+<h3>Configuration Fields</h3>
+<table>
+  <tr><th>Path</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  <tr><td><code>llm.provider</code></td><td>string</td><td><code>"ollama"</code></td><td>LLM provider: <code>ollama</code>, <code>openai</code>, or <code>anthropic</code></td></tr>
+  <tr><td><code>llm.model</code></td><td>string</td><td><code>"llama3"</code></td><td>Model name for the provider</td></tr>
+  <tr><td><code>llm.baseURL</code></td><td>string</td><td><code>"http://localhost:11434"</code></td><td>API base URL (used by Ollama and OpenAI)</td></tr>
+  <tr><td><code>llm.apiKey</code></td><td>string</td><td><code>""</code></td><td>API key (OpenAI/Anthropic). Override via <code>LLM_API_KEY</code> env var</td></tr>
+  <tr><td><code>interfaces.cli.enabled</code></td><td>bool</td><td><code>true</code></td><td>Enable the terminal CLI interface</td></tr>
+  <tr><td><code>interfaces.web.enabled</code></td><td>bool</td><td><code>true</code></td><td>Enable the web dashboard</td></tr>
+  <tr><td><code>interfaces.web.port</code></td><td>number</td><td><code>3131</code></td><td>Web server port</td></tr>
+  <tr><td><code>interfaces.telegram.enabled</code></td><td>bool</td><td><code>false</code></td><td>Enable the Telegram bot interface</td></tr>
+  <tr><td><code>interfaces.telegram.botToken</code></td><td>string</td><td><code>""</code></td><td>Telegram bot token from @BotFather</td></tr>
+  <tr><td><code>tools.filesystem.allowedPaths</code></td><td>string[]</td><td><code>["~/subaru-workspace"]</code></td><td>Directories the filesystem tools can access</td></tr>
+  <tr><td><code>tools.filesystem.blockedPaths</code></td><td>string[]</td><td><code>["/etc","/sys",...]</code></td><td>Directories that are always blocked</td></tr>
+  <tr><td><code>tools.shell.requireConfirmation</code></td><td>bool</td><td><code>true</code></td><td>Ask user before executing shell commands</td></tr>
+  <tr><td><code>tools.shell.blockedCommands</code></td><td>string[]</td><td><code>["rm -rf /",...]</code></td><td>Command patterns that are always blocked</td></tr>
+  <tr><td><code>tools.shell.timeout</code></td><td>number</td><td><code>30000</code></td><td>Shell command timeout (ms)</td></tr>
+  <tr><td><code>memory.shortTermMaxMessages</code></td><td>number</td><td><code>100</code></td><td>Max messages per session before oldest are dropped</td></tr>
+  <tr><td><code>memory.longTermEnabled</code></td><td>bool</td><td><code>true</code></td><td>Enable vector-based long-term memory</td></tr>
+  <tr><td><code>memory.vectorSimilarityThreshold</code></td><td>number</td><td><code>0.7</code></td><td>Minimum cosine similarity for memory recall</td></tr>
+  <tr><td><code>safety.confirmDangerousCommands</code></td><td>bool</td><td><code>true</code></td><td>Require confirmation for dangerous operations</td></tr>
+  <tr><td><code>safety.sandboxShell</code></td><td>bool</td><td><code>false</code></td><td>Run shell commands in firejail/Docker sandbox</td></tr>
+</table>
+
+<h3>Environment Variables</h3>
+<table>
+  <tr><th>Variable</th><th>Maps to</th></tr>
+  <tr><td><code>LLM_PROVIDER</code></td><td><code>llm.provider</code></td></tr>
+  <tr><td><code>LLM_API_KEY</code></td><td><code>llm.apiKey</code></td></tr>
+  <tr><td><code>LLM_BASE_URL</code></td><td><code>llm.baseURL</code></td></tr>
+  <tr><td><code>LLM_MODEL</code></td><td><code>llm.model</code></td></tr>
+  <tr><td><code>TELEGRAM_BOT_TOKEN</code></td><td><code>interfaces.telegram.botToken</code></td></tr>
+  <tr><td><code>WEB_AUTH_PASSWORD</code></td><td>Web dashboard login password (if set, auth is required)</td></tr>
+  <tr><td><code>LOG_LEVEL</code></td><td>Logger level: <code>debug</code>, <code>info</code>, <code>warn</code>, <code>error</code></td></tr>
+  <tr><td><code>STT_API_URL</code></td><td>Speech-to-text API endpoint</td></tr>
+  <tr><td><code>STT_API_KEY</code></td><td>STT API key</td></tr>
+  <tr><td><code>STT_MODEL</code></td><td>STT model name (default: <code>whisper-large-v3-turbo</code>)</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="agent-loop">Agent Loop</h2>
+
+<p>The agent loop (<code>agent/agent.js → run()</code>) is the brain of Subaru. When a user sends a message, the entire agentic cycle runs:</p>
+
+<div class="flow-diagram">
+<span class="highlight">User Message</span>
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+<span class="accent">1. Load short-term history</span> (from session)
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+<span class="accent">2. Recall long-term memories</span> (vector similarity search, top-3)
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+<span class="accent">3. Plan (if complex)</span> (decomposes into numbered steps)
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+<span class="accent">4. Build system prompt</span> (tool descriptions + memories + plan)
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+<span class="accent">5. Assemble messages[]</span> (system + history + user message)
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+┌─── <span class="highlight">AGENT LOOP</span> (max <span class="num">25</span> iterations) ───┐
+<span class="dim">│</span>                                        <span class="dim">│</span>
+<span class="dim">│</span>  <span class="accent">6. Reasoner.think()</span>                   <span class="dim">│</span>
+<span class="dim">│</span>     → streams tokens to interface       <span class="dim">│</span>
+<span class="dim">│</span>     → collects tool_call events          <span class="dim">│</span>
+<span class="dim">│</span>                                        <span class="dim">│</span>
+<span class="dim">│</span>  <span class="accent">7. If tool calls exist:</span>                <span class="dim">│</span>
+<span class="dim">│</span>     → Executor validates + dispatches   <span class="dim">│</span>
+<span class="dim">│</span>     → Results appended to messages[]    <span class="dim">│</span>
+<span class="dim">│</span>     → <span class="highlight">LOOP BACK to step 6</span>              <span class="dim">│</span>
+<span class="dim">│</span>                                        <span class="dim">│</span>
+<span class="dim">│</span>  <span class="accent">8. If no tool calls (text response):</span>   <span class="dim">│</span>
+<span class="dim">│</span>     → <span class="highlight">EXIT LOOP</span>                        <span class="dim">│</span>
+<span class="dim">│</span>                                        <span class="dim">│</span>
+└────────────────────────────────────────┘
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+<span class="accent">9. Save to short-term memory</span>
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+<span class="accent">10. Store in long-term memory</span> (if significant)
+     <span class="dim">│</span>
+     <span class="dim">▼</span>
+<span class="highlight">Response delivered to user</span>
+</div>
+
+<h3>Planner</h3>
+<p>The planner (<code>agent/planner.js</code>) examines the user's message for <strong>complexity triggers</strong> — keywords like "create", "build", "deploy", "refactor", etc. or messages over 200 characters. If triggered, it makes a separate LLM call to generate a numbered step-by-step plan, which gets injected into the system prompt for the main agent loop.</p>
+
+<h3>Reasoner</h3>
+<p>The reasoner (<code>agent/reasoner.js</code>) is a thin async-generator wrapper around the LLM client. It calls <code>llmClient.chat()</code> with the current messages and tool definitions, yielding events as they stream in. This separation keeps the agent loop clean.</p>
+
+<h3>Executor</h3>
+<p>The executor (<code>agent/executor.js</code>) receives tool call requests from the LLM's response. For each call it:</p>
+<ol>
+  <li>Looks up the tool in the registry</li>
+  <li>Validates the input against the tool's JSON Schema using <strong>Ajv</strong></li>
+  <li>Calls the tool's <code>execute()</code> function with the input and a context object</li>
+  <li>Returns the result formatted as a tool message for the LLM conversation</li>
+</ol>
+<p>Tool results are truncated to 12,000 characters to prevent oversized messages from breaking the LLM API.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="llm-client">LLM Client</h2>
+
+<p>The LLM client (<code>llm/client.js</code>) provides a <strong>unified async generator interface</strong> across all providers. It handles:</p>
+
+<ul>
+  <li><strong>Provider abstraction</strong> — dynamically imports the correct provider at startup</li>
+  <li><strong>Retry logic</strong> — up to 3 retries with exponential backoff (2s, 4s, 8s) on transient failures</li>
+  <li><strong>Streaming</strong> — all providers implement the same async generator protocol, yielding <code>{type: "token"}</code>, <code>{type: "tool_call"}</code>, and <code>{type: "done"}</code> events</li>
+  <li><strong>Embeddings</strong> — unified <code>embed(text)</code> function for long-term memory. Falls back gracefully if unavailable</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="providers">LLM Providers</h2>
+
+<h3>Ollama (Local)</h3>
+<p>Default provider. Connects to a locally running Ollama instance at <code>http://localhost:11434</code>. Uses the <code>/api/chat</code> endpoint with streaming. Tool calls are handled via Ollama's native tool-calling support. For embeddings, it auto-tries <code>nomic-embed-text</code>, <code>all-minilm</code>, <code>mxbai-embed-large</code> models.</p>
+
+<h3>OpenAI</h3>
+<p>Uses the official <code>openai</code> npm package. Supports GPT-4, GPT-4o, etc. with native function calling and streaming. Requires <code>LLM_API_KEY</code>. Compatible with any OpenAI-compatible API (e.g. LM Studio, vLLM) by setting <code>LLM_BASE_URL</code>.</p>
+
+<h3>Anthropic</h3>
+<p>Uses the <code>@anthropic-ai/sdk</code> package. Maps OpenAI-format tool definitions to Anthropic's tool format. Handles Anthropic's unique streaming event protocol (<code>content_block_start</code>, <code>content_block_delta</code>, etc.).</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="short-term">Short-term Memory</h2>
+
+<p>Short-term memory (<code>memory/shortTerm.js</code>) manages per-session conversation history. Each interface maintains its own session ID (e.g., <code>cli_main</code>, <code>web_abc123</code>, <code>tg_user_12345</code>).</p>
+
+<ul>
+  <li><strong>In-memory primary storage</strong> — <code>Map&lt;sessionId, message[]&gt;</code> for fast access</li>
+  <li><strong>SQLite persistence</strong> — messages are also written to <code>conversation_history</code> table, enabling session restoration across restarts</li>
+  <li><strong>Auto-trimming</strong> — when a session exceeds <code>shortTermMaxMessages</code> (default: 100), oldest non-system messages are dropped</li>
+  <li><strong>Session management</strong> — supports listing all sessions, clearing per session, and loading from DB on first access</li>
+</ul>
+
+<p>Messages stored include: <code>role</code>, <code>content</code>, <code>timestamp</code>, and optionally <code>tool_call_id</code>, <code>name</code>, <code>tool_calls</code> for tool interaction messages.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="long-term">Long-term Memory</h2>
+
+<p>Long-term memory (<code>memory/longTerm.js</code>) provides <strong>semantic recall</strong> across sessions using vector embeddings.</p>
+
+<h3>How it works</h3>
+<ol>
+  <li><strong>Store</strong> — when the agent completes a significant interaction, the text is embedded into a vector using the LLM's embedding model, then stored with metadata in <code>data/vectors/memories.json</code></li>
+  <li><strong>Recall</strong> — when a new message comes in, it's embedded and compared to all stored memories using <strong>cosine similarity</strong>. Top-K results above the threshold are injected into the system prompt</li>
+</ol>
+
+<h3>Fallback Mode</h3>
+<p>If embedding models are unavailable (e.g., Ollama doesn't have an embedding model pulled), the system automatically falls back to a <strong>bag-of-words hash-trick</strong> approach:</p>
+<ul>
+  <li>Text is tokenized into words, each hashed to a bucket in a fixed 256-dimensional vector</li>
+  <li>Cosine similarity still works, but with keyword-level matching instead of semantic understanding</li>
+  <li>This ensures long-term memory always functions, even without embedding models</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="preferences">Preferences DB</h2>
+
+<p>The preferences system (<code>memory/preferences.js</code>) is a simple <strong>key-value store</strong> backed by SQLite. It stores user preferences that the agent learns over time (e.g., coding style, preferred languages). Preferences are injected into the system prompt automatically.</p>
+
+<p>API: <code>get(key)</code>, <code>set(key, value)</code>, <code>getAll()</code>, <code>del(key)</code>. Values are JSON-serialized.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="tool-registry">Tool Registry</h2>
+
+<p>The tool registry (<code>tools/registry.js</code>) is the central hub for all tool management. It maintains a <code>Map&lt;name, toolObject&gt;</code> and handles:</p>
+
+<ul>
+  <li><strong>Registration</strong> — <code>registerTool(tool)</code> / <code>registerTools(array)</code></li>
+  <li><strong>Lookup</strong> — <code>getTool(name)</code> / <code>getAllTools()</code></li>
+  <li><strong>Dispatch</strong> — <code>dispatch(name, input, context)</code> wraps execution with error handling</li>
+  <li><strong>Loading</strong> — <code>loadTools(config)</code> imports each enabled module, then calls <code>loadPlugins()</code></li>
+  <li><strong>Plugin management</strong> — <code>listPlugins()</code>, <code>savePlugin()</code>, <code>deletePlugin()</code>, <code>reloadPlugins()</code></li>
+</ul>
+
+<p>Tools are loaded conditionally based on config. Each tool module is only imported if <code>config.tools.{key}.enabled !== false</code>.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="built-in-tools">Built-in Tools</h2>
+
+<h3>Filesystem (9 tools)</h3>
+<table>
+  <tr><th>Tool</th><th>Description</th></tr>
+  <tr><td><code>read_file</code></td><td>Read file contents at a given path</td></tr>
+  <tr><td><code>write_file</code></td><td>Write string content to a file (creates directories if needed)</td></tr>
+  <tr><td><code>append_file</code></td><td>Append content to the end of a file</td></tr>
+  <tr><td><code>list_directory</code></td><td>List files/folders with type and size info</td></tr>
+  <tr><td><code>delete_file</code></td><td>Delete a file or empty directory</td></tr>
+  <tr><td><code>create_directory</code></td><td>Create directory recursively</td></tr>
+  <tr><td><code>move_file</code></td><td>Move or rename a file/directory</td></tr>
+  <tr><td><code>file_exists</code></td><td>Check path existence and return metadata</td></tr>
+  <tr><td><code>search_files</code></td><td>Search for files matching a glob pattern</td></tr>
+</table>
+
+<h3>Shell (2 tools)</h3>
+<table>
+  <tr><th>Tool</th><th>Description</th></tr>
+  <tr><td><code>run_command</code></td><td>Execute a shell command, returns stdout/stderr</td></tr>
+  <tr><td><code>run_script</code></td><td>Write and execute a temporary script with a specified interpreter</td></tr>
+</table>
+
+<h3>HTTP (1 tool)</h3>
+<table>
+  <tr><th>Tool</th><th>Description</th></tr>
+  <tr><td><code>http_request</code></td><td>Make HTTP requests (GET/POST/PUT/PATCH/DELETE), returns status + body</td></tr>
+</table>
+
+<h3>Code Execution (2 tools)</h3>
+<table>
+  <tr><th>Tool</th><th>Description</th></tr>
+  <tr><td><code>execute_node</code></td><td>Run JavaScript in a sandboxed environment (no filesystem/network access)</td></tr>
+  <tr><td><code>evaluate_expression</code></td><td>Safely evaluate mathematical/logical expressions</td></tr>
+</table>
+
+<h3>Database (3 tools)</h3>
+<table>
+  <tr><th>Tool</th><th>Description</th></tr>
+  <tr><td><code>db_query</code></td><td>Execute parameterized SELECT queries against SQLite</td></tr>
+  <tr><td><code>db_execute</code></td><td>Execute INSERT/UPDATE/DELETE/CREATE statements</td></tr>
+  <tr><td><code>db_schema</code></td><td>Return current database schema</td></tr>
+</table>
+
+<h3>Git (8 tools)</h3>
+<table>
+  <tr><th>Tool</th><th>Description</th></tr>
+  <tr><td><code>git_status</code></td><td>Show changed files summary</td></tr>
+  <tr><td><code>git_diff</code></td><td>Show uncommitted changes</td></tr>
+  <tr><td><code>git_log</code></td><td>Show recent commit history</td></tr>
+  <tr><td><code>git_pull</code></td><td>Pull remote changes</td></tr>
+  <tr><td><code>git_push</code></td><td>Push local commits</td></tr>
+  <tr><td><code>git_commit</code></td><td>Stage all and commit</td></tr>
+  <tr><td><code>git_checkout</code></td><td>Checkout a branch</td></tr>
+  <tr><td><code>git_clone</code></td><td>Clone a repository</td></tr>
+</table>
+
+<h3>Browser Automation (10 tools)</h3>
+<table>
+  <tr><th>Tool</th><th>Description</th></tr>
+  <tr><td><code>browser_navigate</code></td><td>Navigate to a URL, returns page title + content summary</td></tr>
+  <tr><td><code>browser_click</code></td><td>Click elements by selector, text, or index</td></tr>
+  <tr><td><code>browser_type</code></td><td>Type into input fields, press special keys</td></tr>
+  <tr><td><code>browser_read</code></td><td>Read current page content and interactive elements</td></tr>
+  <tr><td><code>browser_screenshot</code></td><td>Capture screenshot to file</td></tr>
+  <tr><td><code>browser_script</code></td><td>Execute JavaScript in browser context</td></tr>
+  <tr><td><code>browser_wait</code></td><td>Wait for selectors, text, navigation, or delays</td></tr>
+  <tr><td><code>browser_tabs</code></td><td>Manage tabs (list, switch, open, close)</td></tr>
+  <tr><td><code>browser_cookies</code></td><td>Get/set cookies for session management</td></tr>
+  <tr><td><code>browser_close</code></td><td>Close the browser completely</td></tr>
+</table>
+
+<h3>Display (1 tool)</h3>
+<table>
+  <tr><th>Tool</th><th>Description</th></tr>
+  <tr><td><code>display_image</code></td><td>Send an image to the user in the chat interface</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="tool-execution">Tool Execution Flow</h2>
+
+<p>When the LLM decides to call a tool, here's the exact sequence:</p>
+
+<ol>
+  <li>The LLM streams a response containing <code>tool_call</code> events (via the provider's function calling protocol)</li>
+  <li>The reasoner yields these events to the agent loop</li>
+  <li>After the LLM finishes its response, the agent loop collects all tool calls for this turn</li>
+  <li>An <strong>assistant message with tool_calls</strong> is appended to the conversation history</li>
+  <li>For each tool call, the <strong>executor</strong>:
+    <ul>
+      <li>Resolves the tool from the registry</li>
+      <li>Validates input against the tool's JSON Schema (using Ajv with <code>coerceTypes: true</code>)</li>
+      <li>Calls <code>tool.execute(input, context)</code></li>
+      <li>Returns a <code>role: "tool"</code> message with the JSON result</li>
+    </ul>
+  </li>
+  <li>All tool result messages are appended to the conversation</li>
+  <li>The loop sends the updated messages back to the LLM for another iteration</li>
+  <li>This repeats until the LLM responds with only text (no tool calls) or the 25-iteration cap is hit</li>
+</ol>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="cli-interface">CLI Interface</h2>
+
+<p>The CLI (<code>interfaces/cli.js</code>) provides a readline-based REPL in the terminal. It registers a confirmation handler for interactive command approval. Streamed tokens are printed to stdout in real-time. The CLI session uses the session ID <code>cli_main</code>.</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="web-interface">Web Dashboard</h2>
+
+<p>The web interface is an Express server (<code>interfaces/web/server.js</code>) serving a single-page application (<code>public/index.html</code>) with:</p>
+
+<ul>
+  <li><strong>Authentication</strong> — optional cookie-based auth (set <code>WEB_AUTH_PASSWORD</code> to enable)</li>
+  <li><strong>Rate limiting</strong> — 30 POST requests per minute per IP on <code>/api/chat</code></li>
+  <li><strong>SSE streaming</strong> — chat responses stream via <code>/api/stream/:taskId</code> as Server-Sent Events</li>
+  <li><strong>Collapsible sidebar</strong> — System info, Tools, Plugins, and Memory sections with persist-to-localStorage toggle states</li>
+  <li><strong>Plugin management GUI</strong> — create, edit, delete plugins from the browser</li>
+</ul>
+
+<h3>Chat Flow</h3>
+<ol>
+  <li>Client POSTs to <code>/api/chat</code> with <code>{ message, sessionId }</code></li>
+  <li>Server creates a task with an EventEmitter, starts the agent asynchronously</li>
+  <li>Server returns <code>{ taskId, sessionId }</code></li>
+  <li>Client connects to <code>/api/stream/:taskId</code> via EventSource</li>
+  <li>Agent events (tokens, tool calls, results) are pushed as SSE data frames</li>
+  <li>When done, a <code>stream_end</code> event closes the stream</li>
+</ol>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="telegram-interface">Telegram Bot</h2>
+
+<p>The Telegram interface (<code>interfaces/telegram/bot.js</code> + <code>handler.js</code>) uses the <code>node-telegram-bot-api</code> package in polling mode. It supports:</p>
+<ul>
+  <li>Text messages and voice messages (via STT transcription)</li>
+  <li>Per-user sessions (<code>tg_user_{userId}</code>)</li>
+  <li>Inline keyboard confirmations for dangerous operations</li>
+  <li><code>/clear</code> command to reset conversation history</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="permissions">Permissions</h2>
+
+<p>The permissions module (<code>safety/permissions.js</code>) provides two checking functions:</p>
+
+<h3>Path Checking</h3>
+<p><code>checkPath(filePath, config)</code> verifies a file path is allowed:</p>
+<ol>
+  <li>Resolves <code>~</code> to home directory and normalizes the path</li>
+  <li>Checks against <code>blockedPaths</code> — if the path starts with any blocked prefix, it's denied</li>
+  <li>Checks against <code>allowedPaths</code> — if configured, the path must be inside at least one allowed directory</li>
+  <li>Returns <code>{ allowed: boolean, reason: string }</code></li>
+</ol>
+
+<h3>Command Checking</h3>
+<p><code>checkCommand(command, config)</code> checks for blocked command patterns (substring match against <code>blockedCommands</code> config array).</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="confirmations">Confirmations</h2>
+
+<p>The confirmation system (<code>safety/confirmation.js</code>) provides per-interface confirmation prompts for dangerous operations:</p>
+
+<ul>
+  <li><strong>CLI:</strong> Uses <code>readline</code> to prompt <code>[CONFIRM] description (y/n):</code> with a 30-second timeout</li>
+  <li><strong>Web:</strong> Creates a pending confirmation stored in memory. The web client polls <code>/api/confirmations</code> and POSTs approval to <code>/api/confirm/:confirmationId</code></li>
+  <li><strong>Telegram:</strong> Uses inline keyboard buttons for approve/deny</li>
+</ul>
+
+<p>All confirmation handlers return a Promise that resolves to <code>true</code> (approved) or <code>false</code> (denied/timeout).</p>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="sandboxing">Sandboxing</h2>
+
+<p>When <code>safety.sandboxShell</code> is enabled, shell commands are executed in an isolated environment (<code>safety/sandbox.js</code>):</p>
+
+<ol>
+  <li><strong>Firejail</strong> (preferred) — uses <code>firejail --quiet --noprofile --net=none</code> to run commands with no network access</li>
+  <li><strong>Docker</strong> (fallback) — runs commands in a <code>node:20-alpine</code> container with <code>--network none</code></li>
+  <li><strong>Unsandboxed</strong> (last resort) — if neither is available, falls back to normal execution with a warning</li>
+</ol>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- PLUGIN DEVELOPMENT GUIDE -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<h2 id="plugin-overview">Plugin Development Overview</h2>
+
+<p>Subaru's plugin system lets you extend the agent with <strong>custom tools</strong> by placing JavaScript files in the <code>plugins/</code> directory. Plugins are loaded at startup and can also be managed at runtime through the web dashboard's Plugin Manager or the REST API.</p>
+
+<p>When a plugin is loaded, its tools become available to the LLM just like built-in tools. The LLM sees the tool's name, description, and parameter schema, and can decide to call it autonomously when relevant to the user's task.</p>
+
+<div class="info-box note">
+  <div class="box-title">Key Concept</div>
+  <p>A plugin is simply a <code>.js</code> file that default-exports one tool or an array of tools. Each tool is a plain JavaScript object with a specific shape. No framework, no decorators, no build step.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-anatomy">Plugin Anatomy</h2>
+
+<p>A tool object has this exact structure:</p>
+
+<pre><code>{
+  <span class="str">name</span>: <span class="str">'tool_name'</span>,              <span class="cm">// Unique identifier (snake_case)</span>
+  <span class="str">description</span>: <span class="str">'What the tool does'</span>,  <span class="cm">// LLM reads this to decide when to use it</span>
+  <span class="str">parameters</span>: {                      <span class="cm">// JSON Schema for input validation</span>
+    <span class="str">type</span>: <span class="str">'object'</span>,
+    <span class="str">properties</span>: { ... },
+    <span class="str">required</span>: [ ... ]
+  },
+  <span class="fn">execute</span>: <span class="kw">async</span> (input, context) => {  <span class="cm">// The function that runs</span>
+    <span class="cm">// Your logic here</span>
+    <span class="kw">return</span> { success: <span class="num">true</span>, output: <span class="str">'result'</span> };
+  }
+}</code></pre>
+
+<h3>Field Details</h3>
+
+<table>
+  <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+  <tr><td><code>name</code></td><td>string</td><td>Yes</td><td>Unique tool name. Use <code>snake_case</code>. This is what the LLM uses to invoke the tool. Must be unique across all tools (built-in and plugins). Examples: <code>weather_lookup</code>, <code>translate_text</code>, <code>send_email</code></td></tr>
+  <tr><td><code>description</code></td><td>string</td><td>Yes</td><td>Natural language description of what the tool does, when to use it, and what it returns. <strong>This is the most important field</strong> — the LLM reads this to decide whether to call the tool. Be specific and descriptive. Include examples of when to use it.</td></tr>
+  <tr><td><code>parameters</code></td><td>object</td><td>Yes</td><td>JSON Schema object defining the expected input. Must have <code>type: "object"</code>, <code>properties: {}</code>, and <code>required: []</code>. The executor validates input against this schema before calling <code>execute</code>.</td></tr>
+  <tr><td><code>execute</code></td><td>async function</td><td>Yes</td><td>The function that actually performs the work. Receives <code>(input, context)</code>. Must return a result object (see below).</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-schema">Parameter Schema</h2>
+
+<p>The <code>parameters</code> field uses <strong>JSON Schema</strong> (validated by <a href="https://ajv.js.org/" target="_blank">Ajv</a>). This defines what inputs the LLM must provide when calling the tool.</p>
+
+<pre><code><span class="str">parameters</span>: {
+  <span class="str">type</span>: <span class="str">'object'</span>,
+  <span class="str">properties</span>: {
+    <span class="str">query</span>: {
+      <span class="str">type</span>: <span class="str">'string'</span>,
+      <span class="str">description</span>: <span class="str">'The search query to look up'</span>
+    },
+    <span class="str">limit</span>: {
+      <span class="str">type</span>: <span class="str">'number'</span>,
+      <span class="str">description</span>: <span class="str">'Maximum number of results (default: 10)'</span>,
+      <span class="str">default</span>: <span class="num">10</span>
+    },
+    <span class="str">format</span>: {
+      <span class="str">type</span>: <span class="str">'string'</span>,
+      <span class="str">enum</span>: [<span class="str">'json'</span>, <span class="str">'text'</span>, <span class="str">'markdown'</span>],
+      <span class="str">description</span>: <span class="str">'Output format'</span>
+    },
+    <span class="str">tags</span>: {
+      <span class="str">type</span>: <span class="str">'array'</span>,
+      <span class="str">items</span>: { <span class="str">type</span>: <span class="str">'string'</span> },
+      <span class="str">description</span>: <span class="str">'Optional filter tags'</span>
+    }
+  },
+  <span class="str">required</span>: [<span class="str">'query'</span>]
+}</code></pre>
+
+<h4>Supported Types</h4>
+<table>
+  <tr><th>Type</th><th>JSON Schema</th><th>Notes</th></tr>
+  <tr><td>String</td><td><code>{ type: "string" }</code></td><td>Supports <code>enum</code> for fixed choices, <code>minLength</code>, <code>maxLength</code>, <code>pattern</code></td></tr>
+  <tr><td>Number</td><td><code>{ type: "number" }</code></td><td>Supports <code>minimum</code>, <code>maximum</code>, <code>default</code></td></tr>
+  <tr><td>Integer</td><td><code>{ type: "integer" }</code></td><td>Same as number, integers only</td></tr>
+  <tr><td>Boolean</td><td><code>{ type: "boolean" }</code></td><td>true/false</td></tr>
+  <tr><td>Array</td><td><code>{ type: "array", items: {...} }</code></td><td>Define item type with <code>items</code> sub-schema</td></tr>
+  <tr><td>Object</td><td><code>{ type: "object", properties: {...} }</code></td><td>Nested objects for complex inputs</td></tr>
+</table>
+
+<div class="info-box warn">
+  <div class="box-title">Important</div>
+  <p>Always add <code>description</code> to every property. The LLM uses these descriptions to understand what values to provide. Without descriptions, the LLM may pass incorrect or missing values.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-execute">Execute Function</h2>
+
+<p>The <code>execute</code> function is where your tool's logic lives. It receives two arguments:</p>
+
+<pre><code><span class="fn">execute</span>: <span class="kw">async</span> (input, context) => {
+  <span class="cm">// input = validated object matching your parameters schema</span>
+  <span class="cm">// context = runtime context (see next section)</span>
+
+  <span class="kw">try</span> {
+    <span class="cm">// Do work...</span>
+    <span class="kw">const</span> result = <span class="kw">await</span> someOperation(input.query);
+
+    <span class="cm">// Return success</span>
+    <span class="kw">return</span> {
+      <span class="str">success</span>: <span class="num">true</span>,
+      <span class="str">output</span>: <span class="str">`Found ${result.count} items:\n${result.data}`</span>
+    };
+  } <span class="kw">catch</span> (err) {
+    <span class="cm">// Return failure</span>
+    <span class="kw">return</span> {
+      <span class="str">success</span>: <span class="num">false</span>,
+      <span class="str">output</span>: <span class="str">''</span>,
+      <span class="str">error</span>: err.message
+    };
+  }
+}</code></pre>
+
+<h4>Return Object</h4>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>success</code></td><td>boolean</td><td><code>true</code> if the operation completed successfully, <code>false</code> on error</td></tr>
+  <tr><td><code>output</code></td><td>string</td><td>The result text that gets sent back to the LLM. Make this human-readable — the LLM interprets it and presents it to the user. For structured data, use formatted text or JSON strings.</td></tr>
+  <tr><td><code>error</code></td><td>string (optional)</td><td>Error message when <code>success: false</code>. The LLM uses this to diagnose and potentially retry.</td></tr>
+</table>
+
+<div class="info-box note">
+  <div class="box-title">Tip</div>
+  <p>The <code>output</code> string is what the LLM "sees". Format it for the LLM, not the user. The LLM will then interpret and present it conversationally. Include relevant data in the output — don't be afraid of detail, but the executor will truncate outputs over 12,000 characters.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-context">Context Object</h2>
+
+<p>The second argument to <code>execute</code> is a <code>context</code> object containing runtime utilities:</p>
+
+<pre><code>context = {
+  <span class="str">config</span>,          <span class="cm">// The frozen config object (llm, tools, memory settings, etc.)</span>
+  <span class="str">logger</span>,          <span class="cm">// Logger instance with .debug(), .info(), .warn(), .error()</span>
+  <span class="str">confirmationFn</span>, <span class="cm">// async (description) => boolean — ask user for confirmation</span>
+  <span class="str">sessionId</span>       <span class="cm">// Current session ID (e.g., "web_abc123", "cli_main")</span>
+}</code></pre>
+
+<table>
+  <tr><th>Property</th><th>Type</th><th>Description</th></tr>
+  <tr><td><code>context.config</code></td><td>Object</td><td>The full (frozen) Subaru config. Access tool settings, LLM config, memory settings. E.g., <code>context.config.tools.shell.timeout</code></td></tr>
+  <tr><td><code>context.logger</code></td><td>Logger</td><td>Structured logger. Use <code>context.logger.info('Processing...')</code> for operational logging. Supports <code>.debug()</code>, <code>.info()</code>, <code>.warn()</code>, <code>.error()</code></td></tr>
+  <tr><td><code>context.confirmationFn</code></td><td>async Function</td><td>Prompt the user for "yes/no" confirmation before performing a dangerous action. Pass a description string; returns <code>true</code> if approved, <code>false</code> if denied or timed out (30s).</td></tr>
+  <tr><td><code>context.sessionId</code></td><td>string</td><td>The caller's session ID. Useful for session-scoped state or per-user behavior.</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-examples">Plugin Examples</h2>
+
+<h3>Example 1: Simple Utility Tool</h3>
+<p>A tool that converts units:</p>
+
+<pre><code><span class="cm">// plugins/unit-converter.js</span>
+
+<span class="kw">const</span> conversions = {
+  km_to_miles: v => v * <span class="num">0.621371</span>,
+  miles_to_km: v => v * <span class="num">1.60934</span>,
+  c_to_f: v => (v * <span class="num">9</span>/<span class="num">5</span>) + <span class="num">32</span>,
+  f_to_c: v => (v - <span class="num">32</span>) * <span class="num">5</span>/<span class="num">9</span>,
+  kg_to_lbs: v => v * <span class="num">2.20462</span>,
+  lbs_to_kg: v => v * <span class="num">0.453592</span>,
+};
+
+<span class="kw">export default</span> [
+  {
+    name: <span class="str">'convert_unit'</span>,
+    description: <span class="str">'Convert a value between common units. Supports: km↔miles, celsius↔fahrenheit, kg↔lbs. Use this whenever the user asks to convert between these units.'</span>,
+    parameters: {
+      type: <span class="str">'object'</span>,
+      properties: {
+        value: { type: <span class="str">'number'</span>, description: <span class="str">'The numeric value to convert'</span> },
+        conversion: {
+          type: <span class="str">'string'</span>,
+          enum: Object.keys(conversions),
+          description: <span class="str">'The conversion to apply'</span>
+        }
+      },
+      required: [<span class="str">'value'</span>, <span class="str">'conversion'</span>]
+    },
+    execute: <span class="kw">async</span> ({ value, conversion }) => {
+      <span class="kw">const</span> fn = conversions[conversion];
+      <span class="kw">if</span> (!fn) {
+        <span class="kw">return</span> { success: <span class="num">false</span>, output: <span class="str">''</span>, error: <span class="str">`Unknown conversion: ${conversion}`</span> };
+      }
+      <span class="kw">const</span> result = fn(value);
+      <span class="kw">return</span> {
+        success: <span class="num">true</span>,
+        output: <span class="str">`${value} ${conversion.replace(<span class="str">'_to_'</span>, <span class="str">' → '</span>)} = ${result.toFixed(4)}`</span>
+      };
+    }
+  }
+];</code></pre>
+
+<h3>Example 2: External API Integration</h3>
+<p>A tool that fetches weather data from an API:</p>
+
+<pre><code><span class="cm">// plugins/weather.js</span>
+
+<span class="kw">export default</span> [
+  {
+    name: <span class="str">'get_weather'</span>,
+    description: <span class="str">'Get the current weather for a city. Returns temperature, conditions, humidity, and wind speed. Use this when the user asks about weather anywhere in the world.'</span>,
+    parameters: {
+      type: <span class="str">'object'</span>,
+      properties: {
+        city: {
+          type: <span class="str">'string'</span>,
+          description: <span class="str">'City name (e.g., "Tokyo", "New York", "London")'</span>
+        }
+      },
+      required: [<span class="str">'city'</span>]
+    },
+    execute: <span class="kw">async</span> ({ city }, context) => {
+      <span class="kw">try</span> {
+        context.logger.info(<span class="str">`Fetching weather for: ${city}`</span>);
+
+        <span class="kw">const</span> resp = <span class="kw">await</span> fetch(
+          <span class="str">`https://wttr.in/${encodeURIComponent(city)}?format=j1`</span>
+        );
+
+        <span class="kw">if</span> (!resp.ok) <span class="kw">throw new</span> Error(<span class="str">`API returned ${resp.status}`</span>);
+
+        <span class="kw">const</span> data = <span class="kw">await</span> resp.json();
+        <span class="kw">const</span> current = data.current_condition[<span class="num">0</span>];
+
+        <span class="kw">return</span> {
+          success: <span class="num">true</span>,
+          output: [
+            <span class="str">`Weather for ${city}:`</span>,
+            <span class="str">`  Temperature: ${current.temp_C}°C (${current.temp_F}°F)`</span>,
+            <span class="str">`  Feels like: ${current.FeelsLikeC}°C`</span>,
+            <span class="str">`  Conditions: ${current.weatherDesc[0].value}`</span>,
+            <span class="str">`  Humidity: ${current.humidity}%`</span>,
+            <span class="str">`  Wind: ${current.windspeedKmph} km/h ${current.winddir16Point}`</span>,
+          ].join(<span class="str">'\n'</span>)
+        };
+      } <span class="kw">catch</span> (err) {
+        <span class="kw">return</span> { success: <span class="num">false</span>, output: <span class="str">''</span>, error: <span class="str">`Weather lookup failed: ${err.message}`</span> };
+      }
+    }
+  }
+];</code></pre>
+
+<h3>Example 3: Tool with Confirmation</h3>
+<p>A tool that performs a dangerous action and asks for user confirmation:</p>
+
+<pre><code><span class="cm">// plugins/cleanup.js</span>
+<span class="kw">import</span> fs <span class="kw">from</span> <span class="str">'node:fs'</span>;
+<span class="kw">import</span> path <span class="kw">from</span> <span class="str">'node:path'</span>;
+
+<span class="kw">export default</span> [
+  {
+    name: <span class="str">'cleanup_temp_files'</span>,
+    description: <span class="str">'Delete all temporary files older than N days from a specified directory. Asks for user confirmation before deleting. Use when the user wants to clean up old temp files.'</span>,
+    parameters: {
+      type: <span class="str">'object'</span>,
+      properties: {
+        directory: { type: <span class="str">'string'</span>, description: <span class="str">'The directory to clean'</span> },
+        days: { type: <span class="str">'number'</span>, description: <span class="str">'Delete files older than this many days'</span>, default: <span class="num">7</span> }
+      },
+      required: [<span class="str">'directory'</span>]
+    },
+    execute: <span class="kw">async</span> ({ directory, days = <span class="num">7</span> }, context) => {
+      <span class="kw">const</span> files = fs.readdirSync(directory);
+      <span class="kw">const</span> cutoff = Date.now() - (days * <span class="num">86400000</span>);
+      <span class="kw">const</span> oldFiles = files.filter(f => {
+        <span class="kw">const</span> stat = fs.statSync(path.join(directory, f));
+        <span class="kw">return</span> stat.mtime.getTime() < cutoff;
+      });
+
+      <span class="kw">if</span> (oldFiles.length === <span class="num">0</span>) {
+        <span class="kw">return</span> { success: <span class="num">true</span>, output: <span class="str">'No files older than ${days} days found.'</span> };
+      }
+
+      <span class="cm">// Ask for confirmation before deleting</span>
+      <span class="kw">const</span> approved = <span class="kw">await</span> context.confirmationFn(
+        <span class="str">`Delete ${oldFiles.length} files older than ${days} days from ${directory}?`</span>
+      );
+
+      <span class="kw">if</span> (!approved) {
+        <span class="kw">return</span> { success: <span class="num">true</span>, output: <span class="str">'Operation cancelled by user.'</span> };
+      }
+
+      <span class="kw">let</span> deleted = <span class="num">0</span>;
+      <span class="kw">for</span> (<span class="kw">const</span> f <span class="kw">of</span> oldFiles) {
+        fs.unlinkSync(path.join(directory, f));
+        deleted++;
+      }
+
+      <span class="kw">return</span> { success: <span class="num">true</span>, output: <span class="str">`Deleted ${deleted} files.`</span> };
+    }
+  }
+];</code></pre>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-multi-tool">Multi-tool Plugins</h2>
+
+<p>A single plugin file can export multiple tools. Just export an array with multiple tool objects:</p>
+
+<pre><code><span class="cm">// plugins/string-tools.js</span>
+
+<span class="kw">export default</span> [
+  {
+    name: <span class="str">'string_reverse'</span>,
+    description: <span class="str">'Reverse a string'</span>,
+    parameters: {
+      type: <span class="str">'object'</span>,
+      properties: {
+        text: { type: <span class="str">'string'</span>, description: <span class="str">'The text to reverse'</span> }
+      },
+      required: [<span class="str">'text'</span>]
+    },
+    execute: <span class="kw">async</span> ({ text }) => ({
+      success: <span class="num">true</span>,
+      output: text.split(<span class="str">''</span>).reverse().join(<span class="str">''</span>)
+    })
+  },
+  {
+    name: <span class="str">'string_count'</span>,
+    description: <span class="str">'Count characters, words, and lines in a string'</span>,
+    parameters: {
+      type: <span class="str">'object'</span>,
+      properties: {
+        text: { type: <span class="str">'string'</span>, description: <span class="str">'The text to analyze'</span> }
+      },
+      required: [<span class="str">'text'</span>]
+    },
+    execute: <span class="kw">async</span> ({ text }) => ({
+      success: <span class="num">true</span>,
+      output: <span class="str">`Characters: ${text.length}, Words: ${text.split(/\s+/).length}, Lines: ${text.split('\n').length}`</span>
+    })
+  }
+];</code></pre>
+
+<p>You can also export a single tool object (not wrapped in an array) if the plugin provides just one tool:</p>
+
+<pre><code><span class="cm">// plugins/ping.js</span>
+
+<span class="kw">export default</span> {
+  name: <span class="str">'ping'</span>,
+  description: <span class="str">'Returns pong. Used for testing.'</span>,
+  parameters: { type: <span class="str">'object'</span>, properties: {}, required: [] },
+  execute: <span class="kw">async</span> () => ({ success: <span class="num">true</span>, output: <span class="str">'pong'</span> })
+};</code></pre>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-best-practices">Plugin Best Practices</h2>
+
+<h3>Naming</h3>
+<ul>
+  <li>Use <code>snake_case</code> for tool names: <code>get_weather</code>, <code>send_email</code></li>
+  <li>Prefix related tools with a common namespace: <code>slack_send</code>, <code>slack_read</code>, <code>slack_list_channels</code></li>
+  <li>Avoid generic names that conflict with built-in tools</li>
+</ul>
+
+<h3>Descriptions</h3>
+<ul>
+  <li>Write descriptions as if explaining to a human assistant when to use this tool</li>
+  <li>Include <em>what it does</em>, <em>when to use it</em>, and <em>what it returns</em></li>
+  <li>Mention specific use cases: <em>"Use this when the user asks about weather"</em></li>
+  <li>The better your description, the more accurately the LLM will use the tool</li>
+</ul>
+
+<h3>Error Handling</h3>
+<ul>
+  <li>Always wrap execute logic in try/catch</li>
+  <li>Return <code>{ success: false, error: "descriptive message" }</code> on failure</li>
+  <li>The LLM reads error messages and may retry with different input or report the issue to the user</li>
+  <li>Don't throw unhandled exceptions — they'll be caught by the executor, but with less control</li>
+</ul>
+
+<h3>Performance</h3>
+<ul>
+  <li>Keep tool execution fast. Long-running operations block the agent loop</li>
+  <li>For API calls, use timeouts (the agent has a 25-iteration budget)</li>
+  <li>Return concise but complete output — excessively large outputs get truncated at 12KB</li>
+</ul>
+
+<h3>Security</h3>
+<ul>
+  <li>Use <code>context.confirmationFn</code> for destructive operations (deletes, sends, posts)</li>
+  <li>Validate inputs beyond what JSON Schema catches (e.g., URL format, path traversal)</li>
+  <li>Don't hardcode secrets — read them from environment variables or config</li>
+  <li>Be careful with user-controlled input in shell commands or file paths</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-debugging">Debugging Plugins</h2>
+
+<h3>Logging</h3>
+<p>Use the <code>context.logger</code> for structured output:</p>
+
+<pre><code>execute: <span class="kw">async</span> (input, context) => {
+  context.logger.debug(<span class="str">'Tool input:'</span>, JSON.stringify(input));
+  context.logger.info(<span class="str">'Processing request...'</span>);
+  context.logger.warn(<span class="str">'Something unexpected:'</span>, someValue);
+  context.logger.error(<span class="str">'Operation failed:'</span>, err.message);
+}</code></pre>
+
+<p>Set <code>LOG_LEVEL=debug</code> in your <code>.env</code> to see debug-level messages.</p>
+
+<h3>Common Issues</h3>
+<table>
+  <tr><th>Problem</th><th>Cause</th><th>Fix</th></tr>
+  <tr><td>Plugin not loading</td><td>Syntax error in .js file</td><td>Check terminal for <code>Failed to load plugin</code> error message</td></tr>
+  <tr><td>Tool not appearing</td><td>Missing <code>name</code> or <code>execute</code></td><td>Both fields are required for registration</td></tr>
+  <tr><td>LLM never calls the tool</td><td>Poor description</td><td>Make description more specific about when to use it</td></tr>
+  <tr><td>Input validation fails</td><td>Wrong parameter schema</td><td>Check Ajv error messages in the tool result. Ensure types match</td></tr>
+  <tr><td>Tool result not shown</td><td>Returning wrong format</td><td>Must return <code>{ success, output }</code> object</td></tr>
+  <tr><td>Import errors</td><td>Missing dependencies</td><td>Run <code>npm install &lt;package&gt;</code> in the project root</td></tr>
+</table>
+
+<h3>Testing Your Plugin</h3>
+<ol>
+  <li>Place your plugin file in <code>plugins/</code></li>
+  <li>Restart Subaru or click <strong>"↻ Reload"</strong> in the web dashboard's Plugin Manager</li>
+  <li>Check terminal logs for <code>Loaded plugin: your-file.js</code></li>
+  <li>In the chat, ask the agent to use your tool. Be explicit at first: <em>"Use the weather tool to check Tokyo weather"</em></li>
+  <li>Check the tool event cards in the web dashboard to see the exact input/output</li>
+</ol>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="plugin-management">Managing Plugins</h2>
+
+<h3>Via File System</h3>
+<p>Simply place <code>.js</code> files in the <code>plugins/</code> directory. They are loaded on startup. To remove a plugin, delete the file and restart.</p>
+
+<h3>Via Web Dashboard</h3>
+<p>The web dashboard's <strong>Plugins</strong> sidebar section provides a GUI:</p>
+<ul>
+  <li><strong>+ New Plugin</strong> — opens a code editor where you can write a plugin from scratch, with a template placeholder</li>
+  <li><strong>✎ Edit</strong> — modify an existing plugin's code</li>
+  <li><strong>✕ Delete</strong> — remove a plugin file (with confirmation)</li>
+  <li><strong>↻ Reload</strong> — reload all plugins from disk into the tool registry (no restart required)</li>
+</ul>
+
+<h3>Via REST API</h3>
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><code>GET</code></td><td><code>/api/plugins</code></td><td>List all plugins with name, size, modified date, and file content</td></tr>
+  <tr><td><code>POST</code></td><td><code>/api/plugins</code></td><td>Save a plugin. Body: <code>{ filename: "my-plugin.js", content: "export default [...]" }</code></td></tr>
+  <tr><td><code>DELETE</code></td><td><code>/api/plugins/:name</code></td><td>Delete a plugin file by filename</td></tr>
+  <tr><td><code>POST</code></td><td><code>/api/plugins/reload</code></td><td>Reload all plugins from disk into the registry</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="api-endpoints">REST API Endpoints</h2>
+
+<p>All endpoints are served on the same port as the web dashboard (default: <code>3131</code>). If <code>WEB_AUTH_PASSWORD</code> is set, all <code>/api/*</code> endpoints require a Bearer token or <code>subaru_token</code> cookie.</p>
+
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><code>POST</code></td><td><code>/api/login</code></td><td>Authenticate with password. Body: <code>{ password }</code>. Returns: <code>{ token }</code></td></tr>
+  <tr><td><code>POST</code></td><td><code>/api/logout</code></td><td>Invalidate current session token</td></tr>
+  <tr><td><code>POST</code></td><td><code>/api/chat</code></td><td>Send a message. Body: <code>{ message, sessionId? }</code>. Returns: <code>{ taskId, sessionId }</code></td></tr>
+  <tr><td><code>GET</code></td><td><code>/api/stream/:taskId</code></td><td>SSE stream for a chat task. Returns event-stream with JSON events</td></tr>
+  <tr><td><code>GET</code></td><td><code>/api/history?sessionId=</code></td><td>Get conversation history for a session</td></tr>
+  <tr><td><code>DELETE</code></td><td><code>/api/history?sessionId=</code></td><td>Clear conversation history for a session</td></tr>
+  <tr><td><code>GET</code></td><td><code>/api/tools</code></td><td>List all registered tools</td></tr>
+  <tr><td><code>GET</code></td><td><code>/api/config</code></td><td>Get sanitized configuration (API keys redacted)</td></tr>
+  <tr><td><code>POST</code></td><td><code>/api/config</code></td><td>Update writable config fields. Body: partial config object</td></tr>
+  <tr><td><code>GET</code></td><td><code>/api/confirmations</code></td><td>Get pending confirmation prompts</td></tr>
+  <tr><td><code>POST</code></td><td><code>/api/confirm/:id</code></td><td>Resolve a confirmation. Body: <code>{ approved: boolean }</code></td></tr>
+  <tr><td><code>GET</code></td><td><code>/api/plugins</code></td><td>List installed plugins</td></tr>
+  <tr><td><code>POST</code></td><td><code>/api/plugins</code></td><td>Create/save a plugin. Body: <code>{ filename, content }</code></td></tr>
+  <tr><td><code>DELETE</code></td><td><code>/api/plugins/:name</code></td><td>Delete a plugin file</td></tr>
+  <tr><td><code>POST</code></td><td><code>/api/plugins/reload</code></td><td>Reload plugins from disk</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<h2 id="sse-events">SSE Event Types</h2>
+
+<p>The <code>/api/stream/:taskId</code> endpoint sends Server-Sent Events with the following JSON payload types:</p>
+
+<table>
+  <tr><th>Type</th><th>Fields</th><th>Description</th></tr>
+  <tr><td><code>token</code></td><td><code>{ type, content }</code></td><td>A text token from the LLM response. Accumulate these for the full response.</td></tr>
+  <tr><td><code>tool_call</code></td><td><code>{ type, tool, input }</code></td><td>The LLM is calling a tool. <code>tool</code> is the tool name, <code>input</code> is the arguments object.</td></tr>
+  <tr><td><code>tool_result</code></td><td><code>{ type, tool, output, success }</code></td><td>A tool has returned a result.</td></tr>
+  <tr><td><code>done</code></td><td><code>{ type, response? }</code></td><td>The agent has finished processing. <code>response</code> may contain the full text if no tokens were streamed.</td></tr>
+  <tr><td><code>error</code></td><td><code>{ type, message }</code></td><td>An error occurred during processing.</td></tr>
+  <tr><td><code>stream_end</code></td><td><code>{ type }</code></td><td>The SSE stream is closing. Close your EventSource.</td></tr>
+</table>
+
+<div class="info-box note">
+  <div class="box-title">Client Example</div>
+<pre><code style="color: var(--text-dim)"><span class="kw">const</span> es = <span class="kw">new</span> EventSource(<span class="str">'/api/stream/'</span> + taskId);
+es.onmessage = (event) => {
+  <span class="kw">const</span> data = JSON.parse(event.data);
+  <span class="kw">if</span> (data.type === <span class="str">'token'</span>) appendText(data.content);
+  <span class="kw">if</span> (data.type === <span class="str">'stream_end'</span>) es.close();
+};</code></pre>
+</div>
+
+<div style="margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted);">
+  <p>Subaru v1.0.0 — Local AI Assistant Agent</p>
+  <p>Documentation generated for the Subaru project. <a href="/">Back to Dashboard</a></p>
+</div>
+
+</main>
+</div>
+
+<!-- Active nav link highlighter -->
+<script>
+(function() {
+  const links = document.querySelectorAll('.nav-link');
+  const sections = [];
+
+  links.forEach(link => {
+    const id = link.getAttribute('href')?.replace('#', '');
+    if (id) {
+      const el = document.getElementById(id);
+      if (el) sections.push({ id, el, link });
+    }
+  });
+
+  function updateActive() {
+    let active = sections[0];
+    const scrollY = window.scrollY + 80;
+
+    for (const s of sections) {
+      if (s.el.offsetTop <= scrollY) active = s;
+    }
+
+    links.forEach(l => l.classList.remove('active'));
+    if (active) active.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+})();
+</script>
+</body>
+</html>
