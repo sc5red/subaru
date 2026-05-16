@@ -1,6 +1,6 @@
-# SUBARU — Local AI Assistant Agent
+# AUTONOME — Local AI Assistant Agent
 
-A fully local, agentic AI assistant that runs on your machine. Subaru receives requests from multiple interfaces (CLI, Web Dashboard, Telegram), reasons about what to do using an LLM, executes tasks through a modular tool system, and returns results back to you autonomously.
+A fully local, agentic AI assistant that runs on your machine. Autonome receives requests from multiple interfaces (CLI, Web Dashboard, Telegram), reasons about what to do using an LLM, executes tasks through a modular tool system, and returns results back to you autonomously.
 
 ## Quick Start
 
@@ -11,11 +11,11 @@ npm install
 # Copy environment template and configure
 cp .env.example .env
 
-# Start Subaru
+# Start Autonome
 npm start
 ```
 
-Subaru will start with the default configuration using Ollama as the LLM provider. Make sure Ollama is running locally with a model pulled:
+Autonome will start with the default configuration using Ollama as the LLM provider. Make sure Ollama is running locally with a model pulled:
 
 ```bash
 ollama pull llama3
