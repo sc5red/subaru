@@ -7,7 +7,7 @@ describe('checkPath', () => {
   const config = {
     tools: {
       filesystem: {
-        allowedPaths: ['~/subaru-workspace', '/tmp/allowed'],
+        allowedPaths: ['~/autonome-workspace', '/tmp/allowed'],
         blockedPaths: ['/etc', '/sys', '~/.ssh']
       }
     }
@@ -15,7 +15,7 @@ describe('checkPath', () => {
 
   it('should allow paths within allowedPaths', () => {
     const home = os.homedir();
-    const result = checkPath(path.join(home, 'subaru-workspace', 'test.txt'), config);
+    const result = checkPath(path.join(home, 'autonome-workspace', 'test.txt'), config);
     expect(result.allowed).toBe(true);
   });
 

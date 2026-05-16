@@ -1148,7 +1148,7 @@ export default [
   });
 
   // --- Section collapse / expand ---
-  const sectionStates = JSON.parse(localStorage.getItem('subaru_sections') || '{}');
+  const sectionStates = JSON.parse(localStorage.getItem('autonome_sections') || '{}');
 
   window.toggleSection = function(name) {
     const body = document.getElementById('body-' + name);
@@ -1156,7 +1156,7 @@ export default [
     const isCollapsed = body.classList.toggle('collapsed');
     chevron.classList.toggle('collapsed', isCollapsed);
     sectionStates[name] = isCollapsed;
-    localStorage.setItem('subaru_sections', JSON.stringify(sectionStates));
+    localStorage.setItem('autonome_sections', JSON.stringify(sectionStates));
   };
 
   // Restore saved collapse states

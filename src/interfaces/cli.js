@@ -124,7 +124,7 @@ export function start() {
   rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: chalk.cyan.bold('subaru> ')
+    prompt: chalk.cyan.bold('autonome> ')
   });
 
   rl.prompt();

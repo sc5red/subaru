@@ -491,12 +491,12 @@ td code {
 <h2 id="project-structure">Project Structure</h2>
 
 <div class="file-tree">
-<span class="dir">subaru/</span>
+<span class="dir">autonome/</span>
 ├── <span class="file">package.json</span>              <span class="dim"># Dependencies, scripts, bin entry</span>
-├── <span class="file">subaru.config.json</span>        <span class="dim"># Runtime configuration (generated from defaults)</span>
+├── <span class="file">autonome.config.json</span>        <span class="dim"># Runtime configuration (generated from defaults)</span>
 ├── <span class="file">.env</span>                      <span class="dim"># Environment overrides (API keys, etc.)</span>
 ├── <span class="dir">bin/</span>
-│   └── <span class="file">subaru.js</span>             <span class="dim"># CLI entry point (npm link target)</span>
+│   └── <span class="file">autonome.js</span>             <span class="dim"># CLI entry point (npm link target)</span>
 ├── <span class="dir">data/</span>
 │   ├── <span class="file">memory.db</span>             <span class="dim"># SQLite DB: preferences + conversation persistence</span>
 │   ├── <span class="dir">screenshots/</span>           <span class="dim"># Browser screenshot storage</span>
@@ -571,8 +571,8 @@ td code {
 
 <h3>Installation</h3>
 <pre><code><span class="cm"># Clone and install</span>
-git clone &lt;repo-url&gt; subaru
-<span class="kw">cd</span> subaru
+git clone &lt;repo-url&gt; autonome
+<span class="kw">cd</span> autonome
 npm install
 
 <span class="cm"># (Optional) Install globally via npm link</span>
@@ -585,13 +585,13 @@ cp .env.example .env
 <span class="cm"># Start</span>
 npm start
 <span class="cm"># Or if linked globally:</span>
-subaru</code></pre>
+autonome</code></pre>
 
 <h3>Configuration Priority</h3>
 <p>Configuration is loaded in this order (later values override earlier):</p>
 <ol>
   <li><code>src/config/defaults.js</code> — built-in defaults</li>
-  <li><code>subaru.config.json</code> — project-level configuration file</li>
+  <li><code>autonome.config.json</code> — project-level configuration file</li>
   <li><code>.env</code> file — environment variable overrides for sensitive values</li>
 </ol>
 
@@ -601,7 +601,7 @@ subaru</code></pre>
 <p>When Subaru starts (<code>src/index.js</code>), it follows this exact initialization order:</p>
 
 <ol>
-  <li><strong>Load configuration</strong> — <code>config/config.js</code> reads defaults → merges <code>subaru.config.json</code> → applies <code>.env</code> overrides → freezes the config object</li>
+  <li><strong>Load configuration</strong> — <code>config/config.js</code> reads defaults → merges <code>autonome.config.json</code> → applies <code>.env</code> overrides → freezes the config object</li>
   <li><strong>Initialize logger</strong> — configured via <code>LOG_LEVEL</code> env var (debug/info/warn/error)</li>
   <li><strong>Initialize preferences DB</strong> — opens SQLite at <code>data/memory.db</code>, creates <code>preferences</code> table</li>
   <li><strong>Initialize conversation persistence</strong> — creates <code>conversation_history</code> table in same DB</li>
@@ -629,7 +629,7 @@ subaru</code></pre>
   <tr><td><code>interfaces.web.port</code></td><td>number</td><td><code>3131</code></td><td>Web server port</td></tr>
   <tr><td><code>interfaces.telegram.enabled</code></td><td>bool</td><td><code>false</code></td><td>Enable the Telegram bot interface</td></tr>
   <tr><td><code>interfaces.telegram.botToken</code></td><td>string</td><td><code>""</code></td><td>Telegram bot token from @BotFather</td></tr>
-  <tr><td><code>tools.filesystem.allowedPaths</code></td><td>string[]</td><td><code>["~/subaru-workspace"]</code></td><td>Directories the filesystem tools can access</td></tr>
+  <tr><td><code>tools.filesystem.allowedPaths</code></td><td>string[]</td><td><code>["~/autonome-workspace"]</code></td><td>Directories the filesystem tools can access</td></tr>
   <tr><td><code>tools.filesystem.blockedPaths</code></td><td>string[]</td><td><code>["/etc","/sys",...]</code></td><td>Directories that are always blocked</td></tr>
   <tr><td><code>tools.shell.requireConfirmation</code></td><td>bool</td><td><code>true</code></td><td>Ask user before executing shell commands</td></tr>
   <tr><td><code>tools.shell.blockedCommands</code></td><td>string[]</td><td><code>["rm -rf /",...]</code></td><td>Command patterns that are always blocked</td></tr>
@@ -1437,7 +1437,7 @@ subaru</code></pre>
 <!-- ═══════════════════════════════════════════════════ -->
 <h2 id="api-endpoints">REST API Endpoints</h2>
 
-<p>All endpoints are served on the same port as the web dashboard (default: <code>3131</code>). If <code>WEB_AUTH_PASSWORD</code> is set, all <code>/api/*</code> endpoints require a Bearer token or <code>subaru_token</code> cookie.</p>
+<p>All endpoints are served on the same port as the web dashboard (default: <code>3131</code>). If <code>WEB_AUTH_PASSWORD</code> is set, all <code>/api/*</code> endpoints require a Bearer token or <code>autonome_token</code> cookie.</p>
 
 <table>
   <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>

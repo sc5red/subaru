@@ -6,7 +6,7 @@ import logger from '../utils/logger.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..', '..');
-const configPath = path.join(projectRoot, 'subaru.config.json');
+const configPath = path.join(projectRoot, 'autonome.config.json');
 
 function deepMerge(target, source) {
   const result = { ...target };
@@ -35,10 +35,10 @@ function loadConfig() {
       const raw = fs.readFileSync(configPath, 'utf-8');
       fileConfig = JSON.parse(raw);
     } catch (err) {
-      logger.warn(`Failed to parse subaru.config.json: ${err.message}. Using defaults.`);
+      logger.warn(`Failed to parse autonome.config.json: ${err.message}. Using defaults.`);
     }
   } else {
-    logger.info('No subaru.config.json found — generating from defaults.');
+    logger.info('No autonome.config.json found — generating from defaults.');
     fs.writeFileSync(configPath, JSON.stringify(defaults, null, 2), 'utf-8');
     fileConfig = { ...defaults };
   }

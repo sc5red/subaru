@@ -1,11 +1,11 @@
 {
-  "name": "subaru",
+  "name": "autonome",
   "version": "1.0.0",
   "description": "Subaru — Local AI assistant agent",
   "type": "module",
   "main": "src/index.js",
   "bin": {
-    "subaru": "./bin/subaru.js"
+    "autonome": "./bin/autonome.js"
   },
   "scripts": {
     "start": "node src/index.js",

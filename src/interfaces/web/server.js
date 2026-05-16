@@ -26,7 +26,7 @@ function authMiddleware(req, res, next) {
 
   // Check cookie
   const cookies = parseCookies(req.headers.cookie || '');
-  if (cookies.subaru_token && validTokens.has(cookies.subaru_token)) return next();
+  if (cookies.autonome_token && validTokens.has(cookies.autonome_token)) return next();
 
   // For API requests, return 401
   if (req.path.startsWith('/api/')) {
@@ -72,7 +72,7 @@ async function doLogin(e) {
   const pw = document.getElementById('pw').value;
   try {
     const r = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({password:pw}) });
-    if (r.ok) { const d = await r.json(); document.cookie='subaru_token='+d.token+';path=/;SameSite=Strict'; location.reload(); }
+    if (r.ok) { const d = await r.json(); document.cookie='autonome_token='+d.token+';path=/;SameSite=Strict'; location.reload(); }
     else { document.getElementById('err').style.display='block'; }
   } catch { document.getElementById('err').style.display='block'; }
   return false;
@@ -144,7 +144,7 @@ export function start(port = 3131) {
   // Logout endpoint
   app.post('/api/logout', (req, res) => {
     const cookies = parseCookies(req.headers.cookie || '');
-    if (cookies.subaru_token) validTokens.delete(cookies.subaru_token);
+    if (cookies.autonome_token) validTokens.delete(cookies.autonome_token);
     res.json({ success: true });
   });
 

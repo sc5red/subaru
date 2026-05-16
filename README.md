@@ -26,7 +26,7 @@ Then visit **http://localhost:3131** for the web dashboard, or use the CLI direc
 
 ## Configuration
 
-Edit `subaru.config.json` to customize:
+Edit `autonome.config.json` to customize:
 
 - **LLM Provider**: Switch between `ollama`, `openai`, or `anthropic`
 - **Interfaces**: Enable/disable CLI, Web Dashboard, or Telegram bot
@@ -151,8 +151,8 @@ npm run test:watch    # Watch mode
 ## Docker
 
 ```bash
-docker build -t subaru .
-docker run -p 3131:3131 --env-file .env subaru
+docker build -t autonome .
+docker run -p 3131:3131 --env-file .env autonome
 ```
 
 ## Requirements

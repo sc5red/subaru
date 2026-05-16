@@ -104,7 +104,7 @@ const tools = [
                    interpreter.includes('python') ? '.py' :
                    interpreter.includes('bash') || interpreter.includes('sh') ? '.sh' : '.tmp';
 
-      const tmpFile = path.join(os.tmpdir(), `subaru_script_${Date.now()}${ext}`);
+      const tmpFile = path.join(os.tmpdir(), `autonome_script_${Date.now()}${ext}`);
 
       try {
         fs.writeFileSync(tmpFile, script, 'utf-8');

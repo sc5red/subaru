@@ -13,7 +13,7 @@ const defaults = {
   tools: {
     filesystem: {
       enabled: true,
-      allowedPaths: ['~/subaru-workspace'],
+      allowedPaths: ['~/autonome-workspace'],
       blockedPaths: ['/etc', '/sys', '/boot', '~/.ssh']
     },
     shell: {

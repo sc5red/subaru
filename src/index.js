@@ -112,7 +112,7 @@ async function main() {
   let telegramBot = null;
   if (config.interfaces?.telegram?.enabled) {
     if (!config.interfaces.telegram.botToken) {
-      logger.warn('Telegram is enabled but no bot token is configured. Set TELEGRAM_BOT_TOKEN in .env or botToken in subaru.config.json.');
+      logger.warn('Telegram is enabled but no bot token is configured. Set TELEGRAM_BOT_TOKEN in .env or botToken in autonome.config.json.');
     } else {
       startupPromises.push(
         import('./interfaces/telegram/bot.js')
